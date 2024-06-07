@@ -1,0 +1,29 @@
+services:
+  elastic:
+    container_name: elastic
+    image: elasticsearch:${ELASTIC_VERSION}
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - http.cors.enabled=true
+      - http.cors.allow-origin=http://localhost:8080
+    env_file: .env
+    ports:
+      - ${ELASTIC_PORT}:${ELASTIC_PORT}
+    networks:
+     - network_project
+
+  elasticvue:
+    container_name: elasticvue
+    image: cars10/elasticvue:${ELASTICVUE_VERSION}
+    ports:
+      - ${ELASTIC_PORT_VUE}:${ELASTIC_PORT_VUE}
+    env_file:
+      - .env
+    networks:
+      - network_project
+
+
+networks:
+  network_project:
+    driver: bridge
